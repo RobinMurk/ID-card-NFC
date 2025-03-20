@@ -5,6 +5,7 @@ import javacard.framework.Applet;
 import javacard.framework.ISO7816;
 import javacard.framework.ISOException;
 import javacard.framework.Util;
+import org.globalplatform.GPSystem;
 
 public class IDApplet extends Applet {
 	
@@ -31,6 +32,10 @@ public class IDApplet extends Applet {
 	private static final byte[] NOTES4 = {0};
 	private static final byte[] NOTES5 = {0};
 
+	private static final byte[] ATRHistBytes ={
+		(byte)0x00, (byte)0x12, (byte)0x23,(byte)0x3F, (byte)0x53, (byte)0x65, (byte)0x49, (byte)0x44, (byte)0x0F, (byte)0x90, (byte)0x00
+	};
+
 	private static byte[] APDULog;
 	private static short logIndex;
 	private static byte protocol;
@@ -53,10 +58,12 @@ public class IDApplet extends Applet {
 			byte[] buf = apdu.getBuffer();
 			//logAPDU(buf);
 			if(selectingApplet()){
+				Util.arrayCopyNonAtomic(ATRHistBytes, (short)0, buf, (short)0, (short)ATRHistBytes.length);
+				boolean changedATR = GPSystem.setATRHistBytes(buf, (short)0, (byte)ATRHistBytes.length);
 				return;
 			}
-			protocol = APDU.getProtocol();
-			protocol = protocol == APDU.PROTOCOL_T0 ? APDU.PROTOCOL_T0 : APDU.PROTOCOL_T1 ;
+			//protocol = APDU.getProtocol();
+			//protocol = protocol == APDU.PROTOCOL_T0 ? APDU.PROTOCOL_T0 : APDU.PROTOCOL_T1 ;
 
 			//for checking main actions requested by terminal
 			switch (buf[ISO7816.OFFSET_INS]) {
