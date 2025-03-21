@@ -1,4 +1,4 @@
-# EstID Applet Creation
+# Mock EstID Applet Creation and installation
 
 ## Current Status:
 **Not working**
