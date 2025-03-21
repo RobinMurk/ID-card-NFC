@@ -38,7 +38,6 @@ public class IDApplet extends Applet {
 
 	private static byte[] APDULog;
 	private static short logIndex;
-	private static byte protocol;
 
 
 
@@ -59,7 +58,7 @@ public class IDApplet extends Applet {
 			//logAPDU(buf);
 			if(selectingApplet()){
 				Util.arrayCopyNonAtomic(ATRHistBytes, (short)0, buf, (short)0, (short)ATRHistBytes.length);
-				boolean changedATR = GPSystem.setATRHistBytes(buf, (short)0, (byte)ATRHistBytes.length);
+				GPSystem.setATRHistBytes(buf, (short)0, (byte)ATRHistBytes.length);
 				return;
 			}
 			//protocol = APDU.getProtocol();

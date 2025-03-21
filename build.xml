@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="applet" basedir=".">
+
+  <path id="classpath">
+    <fileset dir="lib">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
   <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="ant-javacard.jar"/>
-  <target name="applet">
+
+  <target name="compile">
+    <mkdir dir="build/classes"/>
+    <javac srcdir="src" destdir="build/classes" classpathref="classpath"/>
+  </target>
+
+  <target name="prepare-javacard" depends="compile">
+    <mkdir dir="build/javacard-classes/IDcard"/>
+    <copy todir="build/javacard-classes/IDcard">
+      <fileset dir="build/classes/IDcard" includes="*.class"/>
+    </copy>
+  </target>
+
+
+  <target name="applet" depends="prepare-javacard">
     <javacard jckit="jc222_kit/">
-      <cap output="IDapplet.cap" sources="src/">
+      <cap output="IDapplet.cap" sources="build/javacard-classes/IDcard">
         <applet class="IDcard.IDApplet" aid="a000000077010800070000fe00000100"/>
       </cap>
     </javacard>
